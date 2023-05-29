@@ -84,6 +84,10 @@ RUN \
   git config --global --add safe.directory '*'
 
 RUN git clone https://github.com/zeuscsc/auto_mask.git /stable-diffusion-webui/extensions-builtin/auto_mask
+RUN apt-get install -y wget
+RUN wget https://github.com/danielgatis/rembg/releases/download/v0.0.0/u2net.onnx
+RUN mkdir -p /root/.u2net
+RUN mv u2net.onnx /root/.u2net/u2net.onnx
 
 WORKDIR ${ROOT}
 ENV NVIDIA_DRIVER_CAPABILITIES=compute,utility
@@ -92,5 +96,5 @@ ENV CLI_ARGS="--nowebui --medvram --no-half  --no-half-vae --opt-split-attention
 EXPOSE 7860
 ENTRYPOINT ["/docker/entrypoint.sh"]
 # CMD python -u webui.py --listen --port 7860 ${CLI_ARGS}
-CMD python -u webui.py --listen --port 7860 --nowebui --medvram --no-half  --no-half-vae --opt-split-attention --api --enable-insecure-extension-access --cors-allow-origins=*
-# CMD python -u launch.py --listen --medvram --no-half  --no-half-vae --opt-split-attention --api --enable-insecure-extension-access --cors-allow-origins=*
+# CMD python -u webui.py --listen --port 7860 --nowebui --medvram --no-half  --no-half-vae --opt-split-attention --api --enable-insecure-extension-access --cors-allow-origins=*
+CMD python -u webui.py --listen --port 7860 --nowebui --api --cors-allow-origins=*
