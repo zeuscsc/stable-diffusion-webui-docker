@@ -83,10 +83,14 @@ RUN \
   sed -i 's/in_app_dir = .*/in_app_dir = True/g' /usr/local/lib/python3.10/site-packages/gradio/routes.py && \
   git config --global --add safe.directory '*'
 
+RUN git clone https://github.com/zeuscsc/auto_mask.git /stable-diffusion-webui/extensions-builtin/auto_mask
+
 WORKDIR ${ROOT}
 ENV NVIDIA_DRIVER_CAPABILITIES=compute,utility
 ENV NVIDIA_VISIBLE_DEVICES=all
-ENV CLI_ARGS=""
+ENV CLI_ARGS="--nowebui --medvram --no-half  --no-half-vae --opt-split-attention --api --enable-insecure-extension-access --cors-allow-origins=*"
 EXPOSE 7860
 ENTRYPOINT ["/docker/entrypoint.sh"]
-CMD python -u webui.py --listen --port 7860 ${CLI_ARGS}
+# CMD python -u webui.py --listen --port 7860 ${CLI_ARGS}
+CMD python -u webui.py --listen --port 7860 --nowebui --medvram --no-half  --no-half-vae --opt-split-attention --api --enable-insecure-extension-access --cors-allow-origins=*
+# CMD python -u launch.py --listen --medvram --no-half  --no-half-vae --opt-split-attention --api --enable-insecure-extension-access --cors-allow-origins=*
